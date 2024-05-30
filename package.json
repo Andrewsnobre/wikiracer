@@ -1,23 +1,21 @@
 {
-  "name": "wiki",
+  "name": "wikiracer",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Finds the path between two Wikipedia pages using internal links.",
+  "main": "wikiracer.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/wikiracer.ts",
+    "example": "ts-node src/wikiracer.ts --start https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy --end https://en.wikipedia.org/wiki/Wehrmacht"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@types/node": "^20.12.13",
-    "@types/yargs": "^17.0.32",
-    "axios": "^1.7.2",
-    "cheerio": "^1.0.0-rc.12",
-    "yargs": "^17.7.2"
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
+    "yargs": "^17.0.1"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
-  }
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.5"
+  },
+  "author": "",
+  "license": "MIT"
 }
