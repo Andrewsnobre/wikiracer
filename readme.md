@@ -24,13 +24,13 @@ npm install
 To run the script, use the following command, replacing `<startPage>` and `<endPage>` with the URLs of the Wikipedia pages you want to use as the start and end, respectively:
 
 ```sh
-npx ts-node wikiracer.ts --start <startPage> --end <endPage>
+npx ts-node src\wikiracer.ts --start <startPage> --end <endPage>
 ```
 
 ### Example
 
 ```sh
-npx ts-node wikiracer.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
+npx ts-node src\wikiracer.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
 ```
 
 ## Script Description
