@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node src/wikiracer.ts",
     "example": "ts-node src/wikiracer.ts --start https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy --end https://en.wikipedia.org/wiki/Wehrmacht",
-    "test": "jest --coverage",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "dependencies": {
