@@ -1,5 +1,5 @@
 import axios from 'axios'; // Importing axios for making HTTP requests
-import cheerio from 'cheerio'; // Importing cheerio for parsing HTML
+import cheerio, { load } from 'cheerio'; // Importing cheerio for parsing HTML
 import yargs, { Argv } from 'yargs'; // Importing yargs for handling command-line arguments
 import { hideBin } from 'yargs/helpers'; // Importing helper to handle process arguments
 
@@ -52,7 +52,7 @@ async function findShortestPath(start: string, endSet: RedirectSet): Promise<str
 async function getLinks(page: string): Promise<string[]> {
     try {
         const response = await axios.get(page); // Make a GET request to the page
-        const $ = cheerio.load(response.data); // Load the HTML response with cheerio
+        const $ = load(response.data); // Load the HTML response with cheerio
         const baseUrl = page.substring(0, page.indexOf('/wiki/')); // Extract the base URL
         const links = new Set<string>(); // Use a set to store unique links
 
