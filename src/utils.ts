@@ -48,6 +48,28 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
 
     return null; // Return null if no path is found
 }
+/**
+ * Retries a given function a specified number of times with a delay between retries.
+ * 
+ * @param fn - The function to retry.
+ * @param retries - The number of times to retry the function.
+ * @param delay - The delay between retries in milliseconds.
+ * @returns The result of the function if successful, otherwise throws an error.
+ */
+async function retry<T>(fn: () => Promise<T>, retries: number, delay: number): Promise<T> {
+    for (let i = 0; i < retries; i++) {
+        try {
+            return await fn();
+        } catch (error) {
+            if (i < retries - 1) {
+                await new Promise(resolve => setTimeout(resolve, delay));
+            } else {
+                throw error;
+            }
+        }
+    }
+    throw new Error('Max retries reached');
+}
 
 /**
  * Retrieves all Wikipedia links from a given page.
@@ -57,7 +79,7 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
  */
 export async function getLinks(page: string): Promise<string[]> {
     try {
-        const response = await axios.get(page); // Make a GET request to the page
+        const response = await retry(() => axios.get(page), 3, 1000); // Make a GET request to the page with retries
         const $ = load(response.data); // Load the HTML response with cheerio
         const baseUrl = page.substring(0, page.indexOf('/wiki/')); // Extract the base URL
         const links = new Set<string>(); // Use a set to store unique links
@@ -69,16 +91,12 @@ export async function getLinks(page: string): Promise<string[]> {
         });
 
         return Array.from(links); // Convert the set to an array and return it
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            console.error(`Failed to get links from ${page}: ${error.message}`);
-        } else {
-            console.error(`Failed to get links from ${page}: Unknown error`);
-        }
+    }
+    catch (error) {
+
         return [];
     }
 }
-
 /**
  * Checks if the start and end Wikipedia pages are valid and in the same language.
  * 
