@@ -4,27 +4,23 @@ const { argv } = require('yargs')
     .usage('Usage: $0 --start <startPage> --end <endPage>')
     .demandOption(['start', 'end']);
 
-async function findAlmostShortestPath(start, end) {
+async function findShortestPath(start, endSet) {
     const path = {};
     path[start] = [start];
-    const queue = [{ page: start, depth: 0 }];
+    const queue = [start];
 
     while (queue.length > 0) {
-        queue.sort((a, b) => a.depth - b.depth); // Ordenar a fila pela profundidade
-
-        const { page, depth } = queue.shift();
-        if (depth > 10) continue; // Limite de profundidade para evitar loops infinitos
-
+        const page = queue.shift();
         const links = await getLinks(page);
 
         for (const link of links) {
-            if (end.has(link)) {
+            if (endSet.has(link)) {
                 return path[page].concat(link);
             }
 
             if (!path[link] && link !== page) {
                 path[link] = path[page].concat(link);
-                queue.push({ page: link, depth: depth + 1 });
+                queue.push(link);
             }
         }
     }
@@ -93,7 +89,8 @@ async function main() {
     const end = argv.end;
 
     if (await checkPages(start, end)) {
-        const path = await findAlmostShortestPath(start, await redirected(end));
+        const endSet = await redirected(end);
+        const path = await findShortestPath(start, endSet);
         console.log(path);
     }
 }
@@ -102,5 +99,5 @@ const startTime = Date.now();
 main().then(() => {
     const endTime = Date.now();
     const totalTime = (endTime - startTime) / 1000;
-    console.log(`Time: ${Math.floor(totalTime / 60)}m ${(totalTime % 60).toFixed(3)}s`);
+    console.log(`Execution Time: ${Math.floor(totalTime / 60)}m ${(totalTime % 60).toFixed(3)}s`);
 });
