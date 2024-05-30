@@ -11,7 +11,7 @@ interface PathMap {
 /**
  * Type definition for a set of redirect URLs.
  */
-interface RedirectSet extends Set<string> {}
+interface RedirectSet extends Set<string> { }
 
 /**
  * Finds the shortest path between two Wikipedia pages.
@@ -24,7 +24,7 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
     const path: PathMap = {}; // Object to store paths to each page
     path[start] = [start]; // Initialize path for the starting page
     const queue: string[] = [start]; // Initialize the queue with the starting page
-
+    console.log("Processing...please wait");
     while (queue.length > 0) {
         const currentQueue = [...queue];
         queue.length = 0; // Clear the queue
