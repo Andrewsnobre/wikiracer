@@ -15,7 +15,7 @@ First, clone this repository and install the dependencies:
 ```sh
 git clone https://github.com/Andrewsnobre/wikiracer.git
 cd wikiracer
-npm install axios cheerio yargs
+npm install 
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ node wikiracer4.js --start <startPage> --end <endPage>
 ### Example
 
 ```sh
-node wikiracer4.js --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
+node wikiracer.js --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
 ```
 
 ## Script Description

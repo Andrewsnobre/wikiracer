@@ -4,7 +4,7 @@ const { argv } = require('yargs')
     .usage('Usage: $0 --start <startPage> --end <endPage>')
     .demandOption(['start', 'end']);
 
-async function findShortestPath(start, end) {
+async function findShortestPath(start, endSet) {
     const path = {};
     path[start] = [start];
     const queue = [start];
@@ -14,7 +14,7 @@ async function findShortestPath(start, end) {
         const links = await getLinks(page);
 
         for (const link of links) {
-            if (end.has(link)) {
+            if (endSet.has(link)) {
                 return path[page].concat(link);
             }
 
@@ -84,18 +84,14 @@ async function redirected(end) {
     return new Set([end, baseUrl + title]);
 }
 
-function result(start, end, path) {
-    return JSON.stringify({ start, end, path: path || "No path! :(" }, null, 4);
-}
-
 async function main() {
     const start = argv.start;
     const end = argv.end;
 
     if (await checkPages(start, end)) {
-        const path = await findShortestPath(start, await redirected(end));
-        const jsonResult = result(start, end, path);
-        console.log(jsonResult);
+        const endSet = await redirected(end);
+        const path = await findShortestPath(start, endSet);
+        console.log(path);
     }
 }
 
@@ -103,5 +99,5 @@ const startTime = Date.now();
 main().then(() => {
     const endTime = Date.now();
     const totalTime = (endTime - startTime) / 1000;
-    console.log(`Time: ${Math.floor(totalTime / 60)}m ${(totalTime % 60).toFixed(3)}s`);
+    console.log(`Execution Time: ${Math.floor(totalTime / 60)}m ${(totalTime % 60).toFixed(3)}s`);
 });
