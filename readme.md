@@ -1,7 +1,7 @@
 
-# Wikipedia Shortest Path Finder
+# Wikipedia Path Finder
 
-This script finds the shortest path between two Wikipedia pages using internal links.
+This script finds the  path between two Wikipedia pages using internal links.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ npm install
 To run the script, use the following command, replacing `<startPage>` and `<endPage>` with the URLs of the Wikipedia pages you want to use as the start and end, respectively:
 
 ```sh
-node wikiracer4.js --start <startPage> --end <endPage>
+node wikiracer.js --start <startPage> --end <endPage>
 ```
 
 ### Example
