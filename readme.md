@@ -71,6 +71,7 @@ Execution Time: 0m 3.123s
 ## Common Errors
 
 - If the pages are not valid:
+
   ```sh
   <startPage> does not appear to be a valid Wikipedia page.
   ```
@@ -79,10 +80,14 @@ Execution Time: 0m 3.123s
 
   ```sh
   Pages are in different languages.
+  
 - If the starting page has no links:
+
   ```sh
   Start page is a dead-end page with no Wikipedia links.
+
 - If the ending page is an orphan page:
+
     ```sh
    End page is an orphan page with no Wikipedia pages linking to it.
     ```
