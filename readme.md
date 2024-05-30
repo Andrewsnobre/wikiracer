@@ -1,5 +1,5 @@
 
-# Wikipedia Wikiracer
+# Wikiracer
 
 This script finds the path between two Wikipedia pages using internal links.
 
