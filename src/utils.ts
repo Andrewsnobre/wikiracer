@@ -119,7 +119,7 @@ export async function checkPages(start: string, end: string): Promise<boolean> {
     }
 
     const endResponse = await axios.get(end);
-    const end$ = cheerio.load(endResponse.data);
+    const end$ = load(endResponse.data);
     if (end$('table.metadata.plainlinks.ambox.ambox-style.ambox-Orphan').length > 0) {
         console.error('End page is an orphan page with no Wikipedia pages linking to it.');
         return false; // Return false if the end page is an orphan page
@@ -137,7 +137,7 @@ export async function checkPages(start: string, end: string): Promise<boolean> {
 export async function redirected(end: string): Promise<RedirectSet> {
     try {
         const endResponse = await axios.get(end);
-        const end$ = cheerio.load(endResponse.data);
+        const end$ = load(endResponse.data);
         const title = end$('h1').text().replace(/ /g, '_'); // Get the title of the page
         const baseUrl = end.substring(0, end.indexOf('/wiki/') + '/wiki/'.length);
         return new Set([end, baseUrl + title]); // Return a set with the original and redirected URLs
