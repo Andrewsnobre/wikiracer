@@ -1,13 +1,11 @@
 # Wikiracer
 
-This script finds the path between two Wikipedia pages using internal links.
-
-Should provide a path of Wikipedia links with the start page as the first link, the end page as the final link, and with each link occurring in the article body of the previous link.
+This script finds the path between two Wikipedia pages using internal links. It provides a path of Wikipedia links with the start page as the first link, the end page as the final link, and each link occurring in the article body of the previous link.
 
 ## Prerequisites
 
-- Node.js
-- npm
+- Node.js (version 14 or higher recommended)
+- npm (version 6 or higher recommended)
 
 ## Installation
 
