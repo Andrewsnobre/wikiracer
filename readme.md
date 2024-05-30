@@ -92,6 +92,13 @@ Execution Time: 0m 3.123s
   ```sh
   End page is an orphan page with no Wikipedia pages linking to it.
   ```
+## Running Tests
+
+To run tests, use the following command:
+
+```sh
+npm test
+```
 
 ## License
 
