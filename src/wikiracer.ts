@@ -1,6 +1,6 @@
 import axios from 'axios'; // Importing axios for making HTTP requests
 import cheerio, { load } from 'cheerio'; // Importing cheerio for parsing HTML
-import yargs, { Argv } from 'yargs'; // Importing yargs for handling command-line arguments
+import yargs from 'yargs'; // Importing yargs for handling command-line arguments
 import { hideBin } from 'yargs/helpers'; // Importing helper to handle process arguments
 
 interface PathMap {
@@ -26,17 +26,22 @@ async function findShortestPath(start: string, endSet: RedirectSet): Promise<str
     const queue: string[] = [start]; // Initialize the queue with the starting page
 
     while (queue.length > 0) {
-        const page = queue.shift()!; // Dequeue a page from the front
-        const links = await getLinks(page); // Get links from the current page
+        const currentQueue = [...queue];
+        queue.length = 0; // Clear the queue
 
-        for (const link of links) {
-            if (endSet.has(link)) { // Check if the current link is in the end set
-                return path[page].concat(link); // Return the path if end is found
-            }
+        const pageLinkPromises = currentQueue.map(page => getLinks(page).then(links => ({ page, links })));
+        const pageLinkResults = await Promise.all(pageLinkPromises);
 
-            if (!path[link] && link !== page) { // If the link hasn't been visited
-                path[link] = path[page].concat(link); // Store the path to this link
-                queue.push(link); // Enqueue the link for further exploration
+        for (const { page, links } of pageLinkResults) {
+            for (const link of links) {
+                if (endSet.has(link)) { // Check if the current link is in the end set
+                    return path[page].concat(link); // Return the path if end is found
+                }
+
+                if (!path[link] && link !== page) { // If the link hasn't been visited
+                    path[link] = path[page].concat(link); // Store the path to this link
+                    queue.push(link); // Enqueue the link for further exploration
+                }
             }
         }
     }

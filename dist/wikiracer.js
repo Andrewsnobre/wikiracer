@@ -55,15 +55,19 @@ function findShortestPath(start, endSet) {
         path[start] = [start]; // Initialize path for the starting page
         const queue = [start]; // Initialize the queue with the starting page
         while (queue.length > 0) {
-            const page = queue.shift(); // Dequeue a page from the front
-            const links = yield getLinks(page); // Get links from the current page
-            for (const link of links) {
-                if (endSet.has(link)) { // Check if the current link is in the end set
-                    return path[page].concat(link); // Return the path if end is found
-                }
-                if (!path[link] && link !== page) { // If the link hasn't been visited
-                    path[link] = path[page].concat(link); // Store the path to this link
-                    queue.push(link); // Enqueue the link for further exploration
+            const currentQueue = [...queue];
+            queue.length = 0; // Clear the queue
+            const pageLinkPromises = currentQueue.map(page => getLinks(page).then(links => ({ page, links })));
+            const pageLinkResults = yield Promise.all(pageLinkPromises);
+            for (const { page, links } of pageLinkResults) {
+                for (const link of links) {
+                    if (endSet.has(link)) { // Check if the current link is in the end set
+                        return path[page].concat(link); // Return the path if end is found
+                    }
+                    if (!path[link] && link !== page) { // If the link hasn't been visited
+                        path[link] = path[page].concat(link); // Store the path to this link
+                        queue.push(link); // Enqueue the link for further exploration
+                    }
                 }
             }
         }
