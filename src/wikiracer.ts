@@ -1,17 +1,32 @@
-const axios = require('axios'); // Importing axios for making HTTP requests
-const cheerio = require('cheerio'); // Importing cheerio for parsing HTML
-const { argv } = require('yargs') // Importing yargs for handling command-line arguments
-    .usage('Usage: $0 --start <startPage> --end <endPage>')
-    .demandOption(['start', 'end']); // Making 'start' and 'end' arguments mandatory
+import axios from 'axios'; // Importing axios for making HTTP requests
+import cheerio from 'cheerio'; // Importing cheerio for parsing HTML
+import yargs, { Argv } from 'yargs'; // Importing yargs for handling command-line arguments
+import { hideBin } from 'yargs/helpers'; // Importing helper to handle process arguments
 
-// Function to find the shortest path between two Wikipedia pages
-async function findShortestPath(start, endSet) {
-    const path = {}; // Object to store paths to each page
+interface PathMap {
+    [key: string]: string[];
+}
+
+interface RedirectSet extends Set<string> {}
+
+const argv = yargs(hideBin(process.argv))
+    .usage('Usage: $0 --start <startPage> --end <endPage>')
+    .demandOption(['start', 'end'])
+    .argv as { start: string, end: string };
+
+/**
+ * Finds the shortest path between two Wikipedia pages.
+ * @param start - The starting Wikipedia page URL.
+ * @param endSet - A set of possible ending Wikipedia page URLs.
+ * @returns The shortest path or null if no path is found.
+ */
+async function findShortestPath(start: string, endSet: RedirectSet): Promise<string[] | null> {
+    const path: PathMap = {}; // Object to store paths to each page
     path[start] = [start]; // Initialize path for the starting page
-    const queue = [start]; // Initialize the queue with the starting page
+    const queue: string[] = [start]; // Initialize the queue with the starting page
 
     while (queue.length > 0) {
-        const page = queue.shift(); // Dequeue a page from the front
+        const page = queue.shift()!; // Dequeue a page from the front
         const links = await getLinks(page); // Get links from the current page
 
         for (const link of links) {
@@ -29,13 +44,17 @@ async function findShortestPath(start, endSet) {
     return null; // Return null if no path is found
 }
 
-// Function to get all links from a Wikipedia page
-async function getLinks(page) {
+/**
+ * Retrieves all Wikipedia links from a given page.
+ * @param page - The Wikipedia page URL.
+ * @returns A list of Wikipedia links.
+ */
+async function getLinks(page: string): Promise<string[]> {
     try {
         const response = await axios.get(page); // Make a GET request to the page
         const $ = cheerio.load(response.data); // Load the HTML response with cheerio
         const baseUrl = page.substring(0, page.indexOf('/wiki/')); // Extract the base URL
-        const links = new Set(); // Use a set to store unique links
+        const links = new Set<string>(); // Use a set to store unique links
 
         // Select all anchor tags within paragraph tags that start with "/wiki/"
         $('p a[href^="/wiki/"]').each((_, element) => {
@@ -45,14 +64,23 @@ async function getLinks(page) {
 
         return Array.from(links); // Convert the set to an array and return it
     } catch (error) {
-        console.error(`Failed to get links from ${page}: ${error.message}`);
+        if (axios.isAxiosError(error)) {
+            console.error(`Failed to get links from ${page}: ${error.message}`);
+        } else {
+            console.error(`Failed to get links from ${page}: Unknown error`);
+        }
         return [];
     }
 }
 
-// Function to check if the start and end pages are valid and in the same language
-async function checkPages(start, end) {
-    const languages = []; // Array to store languages of the pages
+/**
+ * Checks if the start and end Wikipedia pages are valid and in the same language.
+ * @param start - The starting Wikipedia page URL.
+ * @param end - The ending Wikipedia page URL.
+ * @returns True if both pages are valid and in the same language, otherwise false.
+ */
+async function checkPages(start: string, end: string): Promise<boolean> {
+    const languages: string[] = []; // Array to store languages of the pages
 
     for (const page of [start, end]) {
         try {
@@ -61,7 +89,11 @@ async function checkPages(start, end) {
             languages.push(page.substring(index - 2, index)); // Extract language code
             await axios.get(page); // Make a GET request to check page validity
         } catch (error) {
-            console.error(`${page} does not appear to be a valid Wikipedia page: ${error.message}`);
+            if (axios.isAxiosError(error)) {
+                console.error(`${page} does not appear to be a valid Wikipedia page: ${error.message}`);
+            } else {
+                console.error(`${page} does not appear to be a valid Wikipedia page: Unknown error`);
+            }
             return false; // Return false if the page is invalid
         }
     }
@@ -86,8 +118,12 @@ async function checkPages(start, end) {
     return true; // Return true if all checks pass
 }
 
-// Function to handle potential redirection of the end page
-async function redirected(end) {
+/**
+ * Handles potential redirection of the ending Wikipedia page.
+ * @param end - The ending Wikipedia page URL.
+ * @returns A set containing the original and redirected URLs.
+ */
+async function redirected(end: string): Promise<RedirectSet> {
     try {
         const endResponse = await axios.get(end);
         const end$ = cheerio.load(endResponse.data);
@@ -95,12 +131,18 @@ async function redirected(end) {
         const baseUrl = end.substring(0, end.indexOf('/wiki/') + '/wiki/'.length);
         return new Set([end, baseUrl + title]); // Return a set with the original and redirected URLs
     } catch (error) {
-        console.error(`Failed to handle redirection for ${end}: ${error.message}`);
+        if (axios.isAxiosError(error)) {
+            console.error(`Failed to handle redirection for ${end}: ${error.message}`);
+        } else {
+            console.error(`Failed to handle redirection for ${end}: Unknown error`);
+        }
         return new Set([end]);
     }
 }
 
-// Main function to execute the script
+/**
+ * Main function to execute the script.
+ */
 async function main() {
     const start = argv.start; // Get the start page from command-line arguments
     const end = argv.end; // Get the end page from command-line arguments
