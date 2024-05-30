@@ -1,9 +1,8 @@
-
 # Wikiracer
 
 This script finds the path between two Wikipedia pages using internal links.
 
-Should provide a path of wikipedia links with the start page as the first link, the end page as the final link, and with each link occuring in the article body of the previous link.
+Should provide a path of Wikipedia links with the start page as the first link, the end page as the final link, and with each link occurring in the article body of the previous link.
 
 ## Prerequisites
 
@@ -25,27 +24,28 @@ npm install
 To run the script, use the following command, replacing `<startPage>` and `<endPage>` with the URLs of the Wikipedia pages you want to use as the start and end, respectively:
 
 ```sh
-node wikiracer.js --start <startPage> --end <endPage>
+npx ts-node wikiracer.ts --start <startPage> --end <endPage>
 ```
 
 ### Example
 
 ```sh
-node wikiracer.js --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
+npx ts-node wikiracer.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
 ```
 
 ## Script Description
 
-- `const axios = require('axios');`: Imports the `axios` module to make HTTP requests.
-- `const cheerio = require('cheerio');`: Imports the `cheerio` module to manipulate the returned HTML.
-- `const { argv } = require('yargs')`: Imports the `yargs` module to handle command-line arguments.
+- `import axios from 'axios';`: Imports the `axios` module to make HTTP requests.
+- `import cheerio, { load } from 'cheerio';`: Imports the `cheerio` module to manipulate the returned HTML.
+- `import yargs from 'yargs';`: Imports the `yargs` module to handle command-line arguments.
+- `import { hideBin } from 'yargs/helpers';`: Imports the helper to handle process arguments.
 
 ### Main Functions
 
-- `findShortestPath(start, end)`: Finds the shortest path between two Wikipedia pages.
-- `getLinks(page)`: Retrieves all links from a Wikipedia page.
-- `checkPages(start, end)`: Checks if the pages are valid and if they are in the same language.
-- `redirected(end)`: Checks if the destination page is a redirected page.
+- `findShortestPath(start: string, endSet: RedirectSet): Promise<string[] | null>`: Finds the shortest path between two Wikipedia pages.
+- `getLinks(page: string): Promise<string[]>`: Retrieves all links from a Wikipedia page.
+- `checkPages(start: string, end: string): Promise<boolean>`: Checks if the pages are valid and if they are in the same language.
+- `redirected(end: string): Promise<RedirectSet>`: Checks if the destination page is a redirected page.
 
 ### Command-Line Variables
 
@@ -65,7 +65,6 @@ The script will return the shortest path between the two pages, or an error mess
   'https://en.wikipedia.org/wiki/Wehrmacht'
 ]
 Execution Time: 0m 3.123s
-
 ```
 
 ## Common Errors
@@ -80,17 +79,19 @@ Execution Time: 0m 3.123s
 
   ```sh
   Pages are in different languages.
-  
+  ```
+
 - If the starting page has no links:
 
   ```sh
   Start page is a dead-end page with no Wikipedia links.
+  ```
 
 - If the ending page is an orphan page:
 
-    ```sh
-   End page is an orphan page with no Wikipedia pages linking to it.
-    ```
+  ```sh
+  End page is an orphan page with no Wikipedia pages linking to it.
+  ```
 
 ## License
 
