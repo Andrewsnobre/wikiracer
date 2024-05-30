@@ -31,18 +31,23 @@ async function findShortestPath(start, endSet) {
 
 // Function to get all links from a Wikipedia page
 async function getLinks(page) {
-    const response = await axios.get(page); // Make a GET request to the page
-    const $ = cheerio.load(response.data); // Load the HTML response with cheerio
-    const baseUrl = page.substring(0, page.indexOf('/wiki/')); // Extract the base URL
-    const links = new Set(); // Use a set to store unique links
+    try {
+        const response = await axios.get(page); // Make a GET request to the page
+        const $ = cheerio.load(response.data); // Load the HTML response with cheerio
+        const baseUrl = page.substring(0, page.indexOf('/wiki/')); // Extract the base URL
+        const links = new Set(); // Use a set to store unique links
 
-    // Select all anchor tags within paragraph tags that start with "/wiki/"
-    $('p a[href^="/wiki/"]').each((_, element) => {
-        const href = $(element).attr('href'); // Get the href attribute
-        links.add(baseUrl + href); // Add the full URL to the set of links
-    });
+        // Select all anchor tags within paragraph tags that start with "/wiki/"
+        $('p a[href^="/wiki/"]').each((_, element) => {
+            const href = $(element).attr('href'); // Get the href attribute
+            links.add(baseUrl + href); // Add the full URL to the set of links
+        });
 
-    return Array.from(links); // Convert the set to an array and return it
+        return Array.from(links); // Convert the set to an array and return it
+    } catch (error) {
+        console.error(`Failed to get links from ${page}: ${error.message}`);
+        return [];
+    }
 }
 
 // Function to check if the start and end pages are valid and in the same language
@@ -52,10 +57,11 @@ async function checkPages(start, end) {
     for (const page of [start, end]) {
         try {
             const index = page.indexOf('.wikipedia.org/wiki/');
+            if (index === -1) throw new Error('Invalid Wikipedia URL');
             languages.push(page.substring(index - 2, index)); // Extract language code
             await axios.get(page); // Make a GET request to check page validity
         } catch (error) {
-            console.error(`${page} does not appear to be a valid Wikipedia page.`);
+            console.error(`${page} does not appear to be a valid Wikipedia page: ${error.message}`);
             return false; // Return false if the page is invalid
         }
     }
@@ -82,11 +88,16 @@ async function checkPages(start, end) {
 
 // Function to handle potential redirection of the end page
 async function redirected(end) {
-    const endResponse = await axios.get(end);
-    const end$ = cheerio.load(endResponse.data);
-    const title = end$('h1').text().replace(/ /g, '_'); // Get the title of the page
-    const baseUrl = end.substring(0, end.indexOf('/wiki/') + '/wiki/'.length);
-    return new Set([end, baseUrl + title]); // Return a set with the original and redirected URLs
+    try {
+        const endResponse = await axios.get(end);
+        const end$ = cheerio.load(endResponse.data);
+        const title = end$('h1').text().replace(/ /g, '_'); // Get the title of the page
+        const baseUrl = end.substring(0, end.indexOf('/wiki/') + '/wiki/'.length);
+        return new Set([end, baseUrl + title]); // Return a set with the original and redirected URLs
+    } catch (error) {
+        console.error(`Failed to handle redirection for ${end}: ${error.message}`);
+        return new Set([end]);
+    }
 }
 
 // Main function to execute the script
@@ -97,7 +108,11 @@ async function main() {
     if (await checkPages(start, end)) { // Check if the pages are valid
         const endSet = await redirected(end); // Get the set of possible end URLs
         const path = await findShortestPath(start, endSet); // Find the shortest path
-        console.log(path); // Log the path
+        if (path) {
+            console.log(path); // Log the path
+        } else {
+            console.log('No path found!');
+        }
     }
 }
 
