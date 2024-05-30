@@ -1,7 +1,9 @@
 
-# Wikipedia Path Finder
+# Wikipedia Wikiracer
 
-This script finds the  path between two Wikipedia pages using internal links.
+This script finds the path between two Wikipedia pages using internal links.
+
+Should provide a path of wikipedia links with the start page as the first link, the end page as the final link, and with each link occuring in the article body of the previous link.
 
 ## Prerequisites
 
