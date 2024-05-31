@@ -1,4 +1,4 @@
-import { findFirstPath, findShortestPath, checkPages, redirected } from './utils';
+import { findFirstPath, findShortestPath, checkPages, redirected } from './index';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
