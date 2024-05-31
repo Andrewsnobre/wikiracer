@@ -116,7 +116,7 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
  */
 export async function getLinks(page: string): Promise<string[]> {
     try {
-        const response = await retry(() => axios.get(page, { timeout: 8000 }), 3, 2000);  // Fetch the page with retries.
+        const response = await retry(() => axios.get(page, { timeout: 30000 }), 3, 2000);  // Fetch the page with retries.
         const $ = load(response.data);  // Load the HTML response with cheerio.
         const baseUrl = page.substring(0, page.indexOf('/wiki/'));  // Extract the base URL.
         const links = new Set<string>();  // Use a set to store unique links.
