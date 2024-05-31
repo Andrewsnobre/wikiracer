@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cheerio, { load } from 'cheerio';
+import { load } from 'cheerio';
 
 /**
  * Type definition for a path map where each key is a string and the value is an array of strings.
@@ -48,6 +48,8 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
 
     return null; // Return null if no path is found
 }
+
+
 /**
  * Retries a given function a specified number of times with a delay between retries.
  * 
@@ -61,6 +63,7 @@ async function retry<T>(fn: () => Promise<T>, retries: number, delay: number): P
         try {
             return await fn();
         } catch (error) {
+           // console.error(`Attempt ${i + 1} failed: ${error}`);
             if (i < retries - 1) {
                 await new Promise(resolve => setTimeout(resolve, delay));
             } else {
@@ -70,32 +73,30 @@ async function retry<T>(fn: () => Promise<T>, retries: number, delay: number): P
     }
     throw new Error('Max retries reached');
 }
-
 /**
- * Retrieves all Wikipedia links from a given page.
- * 
- * @param {string} page - The Wikipedia page URL.
- * @returns {Promise<string[]>} A list of Wikipedia links.
- */
+* Retrieves all Wikipedia links from a given page.
+* 
+* @param {string} page - The Wikipedia page URL.
+* @returns {Promise<string[]>} A list of Wikipedia links.
+*/
 export async function getLinks(page: string): Promise<string[]> {
-    try {
-        const response = await retry(() => axios.get(page), 3, 1000); // Make a GET request to the page with retries
-        const $ = load(response.data); // Load the HTML response with cheerio
-        const baseUrl = page.substring(0, page.indexOf('/wiki/')); // Extract the base URL
-        const links = new Set<string>(); // Use a set to store unique links
+   try {
+       const response = await retry(() => axios.get(page, { timeout: 7000 }), 3, 3000); // Make a GET request to the page with retries
+       const $ = load(response.data); // Load the HTML response with cheerio
+       const baseUrl = page.substring(0, page.indexOf('/wiki/')); // Extract the base URL
+       const links = new Set<string>(); // Use a set to store unique links
 
-        // Select all anchor tags within paragraph tags that start with "/wiki/"
-        $('p a[href^="/wiki/"]').each((_, element) => {
-            const href = $(element).attr('href'); // Get the href attribute
-            links.add(baseUrl + href); // Add the full URL to the set of links
-        });
+       // Select all anchor tags within paragraph tags that start with "/wiki/"
+       $('p a[href^="/wiki/"]').each((_, element) => {
+           const href = $(element).attr('href'); // Get the href attribute
+           links.add(baseUrl + href); // Add the full URL to the set of links
+       });
 
-        return Array.from(links); // Convert the set to an array and return it
-    }
-    catch (error) {
-
-        return [];
-    }
+       return Array.from(links); // Convert the set to an array and return it
+   } catch (error) {
+      // console.error(`Failed to get links for ${page}: ${error}`);
+       return [];
+   }
 }
 /**
  * Checks if the start and end Wikipedia pages are valid and in the same language.
