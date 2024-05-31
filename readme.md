@@ -58,7 +58,7 @@ or
 npm start -- --start <startPage> --end <endPage> -S
 ```
 
-### Example
+### Example Finding the Shortest Path
 
 ```sh
 npx ts-node src\wikiracer.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht" --shortest
