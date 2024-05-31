@@ -25,17 +25,26 @@ async function main(): Promise<void> {
     const start: string = argv.start; // URL of the starting Wikipedia page
     const end: string = argv.end;     // URL of the ending Wikipedia page
 
-    // Check if the provided Wikipedia pages are valid and in the same language
-    if (await checkPages(start, end)) {
-        const endSet: Set<string> = await redirected(end); // Get the set of possible end URLs after redirection
-        const path: string[] | null = await findShortestPath(start, endSet); // Find the shortest path between the pages
+    try {
+        console.log(`Checking pages: ${start} and ${end}`);
+        // Check if the provided Wikipedia pages are valid and in the same language
+        if (await checkPages(start, end)) {
+            console.log(`Pages are valid and in the same language.`);
+            const endSet: Set<string> = await redirected(end); // Get the set of possible end URLs after redirection
+            console.log(`Finding shortest path from ${start} to ${end}`);
+            const path: string[] | null = await findShortestPath(start, endSet); // Find the shortest path between the pages
 
-        // Print the found path or indicate that no path was found
-        if (path) {
-            console.log(path);
+            // Print the found path or indicate that no path was found
+            if (path) {
+                console.log('Path found:', path);
+            } else {
+                console.log('No path found!');
+            }
         } else {
-            console.log('No path found!');
+            console.log('Invalid pages or pages in different languages.');
         }
+    } catch (error) {
+        console.error('Error:', error);
     }
 }
 
