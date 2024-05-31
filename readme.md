@@ -75,6 +75,7 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 
 - `import axios from 'axios';`: Imports the `axios` module to make HTTP requests.
 - `import cheerio, { load } from 'cheerio';`: Imports the `cheerio` module to manipulate the returned HTML.
+- `import pLimit from 'p-limit';`: Imports the p-limit module to limit the number of concurrent promises.
 - `import yargs from 'yargs';`: Imports the `yargs` module to handle command-line arguments.
 - `import { hideBin } from 'yargs/helpers';`: Imports the helper to handle process arguments.
 
