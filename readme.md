@@ -44,7 +44,7 @@ or
 npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
 ```
 
-### Finding the Shortest Path
+### Optional: Finding the Shortest Path
 
 To find the shortest path between the pages, add the `--shortest` or `-S` flag:
 
