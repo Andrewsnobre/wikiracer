@@ -1,5 +1,9 @@
 import axios from 'axios';
 import { load } from 'cheerio';
+import pLimit from 'p-limit';
+
+// Configure a limit of concurrent requests
+const limit = pLimit(30); //  30 concurrent requests
 
 /**
  * Interface representing a path map where each key is a string (URL) and the value is an array of strings (URLs).
@@ -11,7 +15,7 @@ interface PathMap {
 /**
  * Interface representing a set of redirect URLs.
  */
-interface RedirectSet extends Set<string> {}
+interface RedirectSet extends Set<string> { }
 
 /**
  * Retries a given function a specified number of times with a delay between retries.
@@ -52,7 +56,9 @@ export async function findFirstPath(start: string, endSet: RedirectSet): Promise
         const currentQueue = [...queue];
         queue.length = 0;  // Clear the queue.
 
-        const pageLinkPromises = currentQueue.map(page => getLinks(page).then(links => ({ page, links })));
+        const pageLinkPromises = currentQueue.map(page =>
+            limit(() => getLinks(page).then(links => ({ page, links })))
+        );
         const pageLinkResults = await Promise.all(pageLinkPromises);  // Fetch links from all pages in the current queue.
 
         for (const { page, links } of pageLinkResults) {
@@ -88,7 +94,9 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
         const currentQueue = [...queue];
         queue.length = 0;  // Clear the queue.
 
-        const pageLinkPromises = currentQueue.map(page => getLinks(page).then(links => ({ page, links })));
+        const pageLinkPromises = currentQueue.map(page =>
+            limit(() => getLinks(page).then(links => ({ page, links })))
+        );
         const pageLinkResults = await Promise.all(pageLinkPromises);  // Fetch links from all pages in the current queue.
 
         for (const { page, links } of pageLinkResults) {
@@ -128,7 +136,7 @@ export async function getLinks(page: string): Promise<string[]> {
 
         return Array.from(links);  // Convert the set to an array and return it.
     } catch (error) {
-       // console.error(`Failed to get links for ${page}: ${error.message}`);
+        console.error(`Failed to get links for ${page}: ${error}`);
         return [];
     }
 }
@@ -148,7 +156,7 @@ export async function checkPages(start: string, end: string): Promise<boolean> {
             const index = page.indexOf('.wikipedia.org/wiki/');
             if (index === -1) throw new Error('Invalid Wikipedia URL');
             languages.push(page.substring(index - 2, index));  // Extract the language code.
-            const response = await axios.get(page, { timeout: 5000 });  // Fetch the page to check validity.
+            const response = await axios.get(page, { timeout: 15000 });  // Fetch the page to check validity.
             if (response.status !== 200) {
                 throw new Error(`Failed to fetch page: ${page}`);
             }
@@ -168,7 +176,7 @@ export async function checkPages(start: string, end: string): Promise<boolean> {
         return false;  // Return false if it has no links.
     }
 
-    const endResponse = await axios.get(end, { timeout: 5000 });
+    const endResponse = await axios.get(end, { timeout: 15000 });
     const end$ = load(endResponse.data);
     if (end$('table.metadata.plainlinks.ambox.ambox-style.ambox-Orphan').length > 0) {
         console.error('End page is an orphan page with no Wikipedia pages linking to it.');
@@ -186,7 +194,7 @@ export async function checkPages(start: string, end: string): Promise<boolean> {
  */
 export async function redirected(end: string): Promise<RedirectSet> {
     try {
-        const endResponse = await axios.get(end, { timeout: 5000 });
+        const endResponse = await axios.get(end, { timeout: 15000 });
         const end$ = load(endResponse.data);
         const title = end$('h1').text().replace(/ /g, '_');  // Get the title of the page.
         const baseUrl = end.substring(0, end.indexOf('/wiki/') + '/wiki/'.length);
