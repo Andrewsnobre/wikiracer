@@ -1,3 +1,4 @@
+
 # Wikiracer
 
 This script finds the path between two Wikipedia pages using internal links. It provides a path of Wikipedia links with the start page as the first link, the end page as the final link, and each link occurring in the article body of the previous link.
@@ -43,6 +44,32 @@ or
 npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
 ```
 
+### Finding the Shortest Path
+
+To find the shortest path between the pages, add the `--shortest` or `-S` flag:
+
+```sh
+npx ts-node src\wikiracer.ts --start <startPage> --end <endPage> --shortest
+```
+
+or
+
+```sh
+npm start -- --start <startPage> --end <endPage> -S
+```
+
+### Example
+
+```sh
+npx ts-node src\wikiracer.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht" --shortest
+```
+
+or
+
+```sh
+npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht" -S
+```
+
 ## Script Description
 
 - `import axios from 'axios';`: Imports the `axios` module to make HTTP requests.
@@ -53,6 +80,7 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 ### Main Functions
 
 - `findShortestPath(start: string, endSet: RedirectSet): Promise<string[] | null>`: Finds the shortest path between two Wikipedia pages.
+- `findFirstPath(start: string, endSet: RedirectSet): Promise<string[] | null>`: Finds the first path found between two Wikipedia pages.
 - `getLinks(page: string): Promise<string[]>`: Retrieves all links from a Wikipedia page.
 - `checkPages(start: string, end: string): Promise<boolean>`: Checks if the pages are valid and if they are in the same language.
 - `redirected(end: string): Promise<RedirectSet>`: Checks if the destination page is a redirected page.
@@ -61,10 +89,11 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 
 - `--start`: URL of the starting Wikipedia page.
 - `--end`: URL of the ending Wikipedia page.
+- `--shortest` or `-S`: Optional flag to find the shortest path between the pages.
 
 ## Output
 
-The script will return the shortest path between the two pages, or an error message if no valid path is found.
+The script will return the path between the two pages, or an error message if no valid path is found.
 
 ### Example Output
 
@@ -102,7 +131,7 @@ Execution Time: 0m 7.123s
   ```sh
   End page is an orphan page with no Wikipedia pages linking to it.
   ```
-  
+
 ## Running Tests
 
 To run tests, use the following command:
@@ -146,6 +175,15 @@ Handles redirections on the ending Wikipedia page.
 Finds the shortest path between two Wikipedia pages.
 
 - Should find the shortest path between two Wikipedia pages.
+- Should return `null` if no path is found.
+- Should handle visited pages correctly.
+- Should handle errors gracefully.
+
+### findFirstPath
+
+Finds the first path between two Wikipedia pages.
+
+- Should find the first path between two Wikipedia pages.
 - Should return `null` if no path is found.
 - Should handle visited pages correctly.
 - Should handle errors gracefully.
