@@ -19,6 +19,16 @@ describe('utils', () => {
                 'https://en.wikipedia.org/wiki/Link2'
             ]);
         });
+
+        it('should return an empty array if no links are found', async () => {
+            const page = 'https://en.wikipedia.org/wiki/Empty_Page';
+            const html = `<html><body><p>No links here!</p></body></html>`;
+            mockedAxios.get.mockResolvedValue({ data: html });
+
+            const links = await getLinks(page);
+
+            expect(links).toEqual([]);
+        });
     });
 
     describe('checkPages', () => {
@@ -26,6 +36,65 @@ describe('utils', () => {
             const start = 'https://en.wikipedia.org/wiki/Invalid_Page';
             const end = 'https://en.wikipedia.org/wiki/Wehrmacht';
             mockedAxios.get.mockRejectedValue(new Error('Page not found'));
+
+            const result = await checkPages(start, end);
+
+            expect(result).toBe(false);
+        });
+
+        it('should return true for valid Wikipedia pages in the same language', async () => {
+            const start = "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy";
+            const end = "https://en.wikipedia.org/wiki/Wehrmacht";
+            const html = `<html><body><p><a href="/wiki/Link1">Link1</a></p></body></html>`;
+            
+            mockedAxios.get.mockImplementation((url) => {
+                if (url === start || url === end) {
+                    return Promise.resolve({ status: 200, data: html });
+                }
+                return Promise.reject(new Error('Page not found'));
+            });
+
+            const result = await checkPages(start, end);
+
+            expect(result).toBe(true);
+        });
+
+        it('should return false if pages are in different languages', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
+            const end = 'https://es.wikipedia.org/wiki/Wehrmacht';
+            mockedAxios.get.mockResolvedValue({ status: 200 });
+
+            const result = await checkPages(start, end);
+
+            expect(result).toBe(false);
+        });
+
+        it('should return false if start page has no links', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Empty_Page';
+            const end = 'https://en.wikipedia.org/wiki/Wehrmacht';
+            const html = `<html><body><p>No links here!</p></body></html>`;
+            mockedAxios.get.mockImplementation((url) => {
+                if (url === start) {
+                    return Promise.resolve({ data: html });
+                }
+                return Promise.resolve({ status: 200 });
+            });
+
+            const result = await checkPages(start, end);
+
+            expect(result).toBe(false);
+        });
+
+        it('should return false if end page is an orphan page', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
+            const end = 'https://en.wikipedia.org/wiki/Wehrmacht';
+            const orphanHtml = `<html><body><table class="metadata plainlinks ambox ambox-style ambox-Orphan"></table></body></html>`;
+            mockedAxios.get.mockImplementation((url) => {
+                if (url === end) {
+                    return Promise.resolve({ data: orphanHtml });
+                }
+                return Promise.resolve({ status: 200 });
+            });
 
             const result = await checkPages(start, end);
 
@@ -45,6 +114,52 @@ describe('utils', () => {
                 'https://en.wikipedia.org/wiki/Wehrmacht',
                 'https://en.wikipedia.org/wiki/Wehrmacht'
             ]));
+        });
+    });
+
+    describe('findShortestPath', () => {
+        it('should find the shortest path between two Wikipedia pages', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
+            const endSet = new Set(['https://en.wikipedia.org/wiki/Wehrmacht']);
+            const html1 = `<html><body><p><a href="/wiki/Link1">Link1</a></p></body></html>`;
+            const html2 = `<html><body><p><a href="/wiki/Wehrmacht">Wehrmacht</a></p></body></html>`;
+
+            mockedAxios.get.mockImplementation((url) => {
+                if (url === start) {
+                    return Promise.resolve({ data: html1 });
+                } else if (url === 'https://en.wikipedia.org/wiki/Link1') {
+                    return Promise.resolve({ data: html2 });
+                }
+                return Promise.resolve({ status: 200 });
+            });
+
+            const path = await findShortestPath(start, endSet);
+
+            expect(path).toEqual([
+                'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy',
+                'https://en.wikipedia.org/wiki/Link1',
+                'https://en.wikipedia.org/wiki/Wehrmacht'
+            ]);
+        });
+
+        it('should return null if no path is found', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
+            const endSet = new Set(['https://en.wikipedia.org/wiki/Wehrmacht']);
+            const html1 = `<html><body><p><a href="/wiki/Link1">Link1</a></p></body></html>`;
+            const html2 = `<html><body><p>No relevant links</p></body></html>`;
+
+            mockedAxios.get.mockImplementation((url) => {
+                if (url === start) {
+                    return Promise.resolve({ data: html1 });
+                } else if (url === 'https://en.wikipedia.org/wiki/Link1') {
+                    return Promise.resolve({ data: html2 });
+                }
+                return Promise.resolve({ status: 200 });
+            });
+
+            const path = await findShortestPath(start, endSet);
+
+            expect(path).toBeNull();
         });
     });
 });
