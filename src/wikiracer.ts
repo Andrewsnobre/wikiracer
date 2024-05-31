@@ -26,21 +26,25 @@ const argv = yargs(hideBin(process.argv))
  * @returns {Promise<void>} - A promise that resolves when the main function completes.
  */
 async function main(): Promise<void> {
-    const start: string = argv.start;
-    const end: string = argv.end;
-    const useShortestPath: boolean = argv.shortest || false;
+    const start: string = argv.start; // URL of the starting Wikipedia page
+    const end: string = argv.end; // URL of the ending Wikipedia page
+    const useShortestPath: boolean = argv.shortest || false; // Flag to determine if the shortest path should be found
 
     try {
         console.log(`Checking pages: ${start} and ${end}`);
+        // Validate the start and end Wikipedia pages
         if (await checkPages(start, end)) {
             console.log(`Pages are valid and in the same language.`);
+            // Handle potential redirection for the end page
             const endSet: Set<string> = await redirected(end);
             console.log(`Finding ${useShortestPath ? 'shortest' : 'first'} path from ${start} to ${end}`);
             
+            // Find the path based on the specified mode (shortest or first)
             const path: string[] | null = useShortestPath
                 ? await findShortestPath(start, endSet)
                 : await findFirstPath(start, endSet);
 
+            // Print the found path or indicate that no path was found
             if (path) {
                 console.log('Path found:', path);
             } else {
@@ -54,10 +58,12 @@ async function main(): Promise<void> {
     }
 }
 
+// Record the start time of the script execution
 const startTime: number = Date.now();
 
+// Execute the main function and calculate the total execution time
 main().then((): void => {
     const endTime: number = Date.now();
-    const totalTime: number = (endTime - startTime) / 1000;
+    const totalTime: number = (endTime - startTime) / 1000; // Total time in seconds
     console.log(`Execution Time: ${Math.floor(totalTime / 60)}m ${(totalTime % 60).toFixed(3)}s`);
 });
