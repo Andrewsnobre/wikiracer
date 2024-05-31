@@ -111,6 +111,40 @@ To run tests, use the following command:
 npm test
 ```
 
+## Test Coverage
+
+The tests include checks for the following functionalities:
+
+### getLinks
+
+Verifies that links are correctly extracted from a Wikipedia page.
+
+- Should fetch and parse links from a Wikipedia page.
+- Should return an empty array if no links are found.
+
+### checkPages
+
+Verifies that the provided Wikipedia pages are valid and in the same language.
+
+- Should return `false` for invalid Wikipedia pages.
+- Should return `true` for valid Wikipedia pages in the same language.
+- Should return `false` if the pages are in different languages.
+- Should return `false` if the start page has no links.
+- Should return `false` if the end page is an orphan page.
+
+### redirected
+
+Handles redirections on the ending Wikipedia page.
+
+- Should handle redirection for the ending Wikipedia page.
+
+### findShortestPath
+
+Finds the shortest path between two Wikipedia pages.
+
+- Should find the shortest path between two Wikipedia pages.
+- Should return `null` if no path is found.
+
 ## License
 
 This project is licensed under the terms of the MIT license.
