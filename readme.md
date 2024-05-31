@@ -69,12 +69,12 @@ The script will return the shortest path between the two pages, or an error mess
 ### Example Output
 
 ```sh
-[
-   'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy',
-  'https://en.wikipedia.org/wiki/Scorched_earth',
-  'https://en.wikipedia.org/wiki/Wehrmacht'
+Path found: [
+'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy',
+'https://en.wikipedia.org/wiki/Scorched_earth',
+'https://en.wikipedia.org/wiki/Wehrmacht'
 ]
-Execution Time: 0m 3.123s
+Execution Time: 0m 7.123s
 ```
 
 ## Common Errors
