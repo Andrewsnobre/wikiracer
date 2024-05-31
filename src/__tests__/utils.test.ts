@@ -29,6 +29,15 @@ describe('utils', () => {
 
             expect(links).toEqual([]);
         });
+
+        it('should handle errors and return an empty array', async () => {
+            const page = 'https://en.wikipedia.org/wiki/Error_Page';
+            mockedAxios.get.mockRejectedValue(new Error('Network Error'));
+
+            const links = await getLinks(page);
+
+            expect(links).toEqual([]);
+        });
     });
 
     describe('checkPages', () => {
@@ -100,6 +109,16 @@ describe('utils', () => {
 
             expect(result).toBe(false);
         });
+
+        it('should return false if the response status is not 200', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
+            const end = 'https://en.wikipedia.org/wiki/Wehrmacht';
+            mockedAxios.get.mockResolvedValue({ status: 404 });
+
+            const result = await checkPages(start, end);
+
+            expect(result).toBe(false);
+        });
     });
 
     describe('redirected', () => {
@@ -115,9 +134,19 @@ describe('utils', () => {
                 'https://en.wikipedia.org/wiki/Wehrmacht'
             ]));
         });
+
+        it('should handle errors gracefully', async () => {
+            const end = 'https://en.wikipedia.org/wiki/Error_Page';
+            mockedAxios.get.mockRejectedValue(new Error('Network Error'));
+
+            const result = await redirected(end);
+
+            expect(result).toEqual(new Set([end]));
+        });
     });
 
     describe('findShortestPath', () => {
+       
         it('should find the shortest path between two Wikipedia pages', async () => {
             const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
             const endSet = new Set(['https://en.wikipedia.org/wiki/Wehrmacht']);
@@ -156,6 +185,46 @@ describe('utils', () => {
                 }
                 return Promise.resolve({ status: 200 });
             });
+
+            const path = await findShortestPath(start, endSet);
+
+            expect(path).toBeNull();
+        });
+
+        it('should handle visited pages correctly', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
+            const endSet = new Set(['https://en.wikipedia.org/wiki/Wehrmacht']);
+            const html1 = `<html><body><p><a href="/wiki/Link1">Link1</a></p></body></html>`;
+            const html2 = `<html><body><p><a href="/wiki/Wehrmacht">Wehrmacht</a></p></body></html>`;
+
+            mockedAxios.get.mockImplementation((url) => {
+                if (url === start) {
+                    return Promise.resolve({ data: html1 });
+                } else if (url === 'https://en.wikipedia.org/wiki/Link1') {
+                    return Promise.resolve({ data: html2 });
+                }
+                return Promise.resolve({ status: 200 });
+            });
+
+            // Mocking that /wiki/Link1 has already been visited
+            const pathMap = {
+                [start]: [start],
+                'https://en.wikipedia.org/wiki/Link1': [start, 'https://en.wikipedia.org/wiki/Link1']
+            };
+
+            const path = await findShortestPath(start, endSet);
+
+            expect(path).toEqual([
+                'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy',
+                'https://en.wikipedia.org/wiki/Link1',
+                'https://en.wikipedia.org/wiki/Wehrmacht'
+            ]);
+        });
+
+        it('should handle errors gracefully', async () => {
+            const start = 'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy';
+            const endSet = new Set(['https://en.wikipedia.org/wiki/Wehrmacht']);
+            mockedAxios.get.mockRejectedValue(new Error('Network Error'));
 
             const path = await findShortestPath(start, endSet);
 
