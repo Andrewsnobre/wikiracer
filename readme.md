@@ -46,7 +46,8 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 
 ### Optional: Finding the Shortest Path
 
-To find the shortest path between the pages, add the `--shortest` or `-S` flag:<br>
+To find the shortest path between the pages, add the `--shortest` or `-S` flag:
+
 Warning: This option may take longer to run.
 
 ```sh
@@ -146,49 +147,86 @@ npm test
 
 The tests include checks for the following functionalities:
 
-### getLinks
-
-Verifies that links are correctly extracted from a Wikipedia page.
-
-- Should fetch and parse links from a Wikipedia page.
-- Should return an empty array if no links are found.
-- Should handle errors and return an empty array.
-
 ### checkPages
 
 Verifies that the provided Wikipedia pages are valid and in the same language.
 
-- Should return `false` for invalid Wikipedia pages.
-- Should return `true` for valid Wikipedia pages in the same language.
-- Should return `false` if the pages are in different languages.
-- Should return `false` if the start page has no links.
-- Should return `false` if the end page is an orphan page.
-- Should return `false` if the response status is not 200.
+- **Should return `true` for valid Wikipedia pages in the same language:**
+  - Mocks a valid Wikipedia response for pages in the same language.
+  - Verifies that the function returns `true` for valid pages in the same language.
 
-### redirected
+- **Should return `false` for invalid Wikipedia URLs:**
+  - Mocks an invalid Wikipedia URL.
+  - Verifies that the function returns `false` for invalid URLs.
 
-Handles redirections on the ending Wikipedia page.
+- **Should return `false` if the pages are in different languages:**
+  - Mocks pages in different languages.
+  - Verifies that the function returns `false` for pages in different languages.
 
-- Should handle redirection for the ending Wikipedia page.
-- Should handle errors gracefully.
+- **Should return `false` if the start page has no links:**
+  - Mocks a start page with no links.
+  - Verifies that the function returns `false` when the start page has no links.
 
-### findShortestPath
+- **Should return `false` if the end page is an orphan page:**
+  - Mocks an end page that is an orphan page.
+  - Verifies that the function returns `false` when the end page is an orphan page.
+  - Verifies that the correct error message is logged.
 
-Finds the shortest path between two Wikipedia pages.
+- **Should return `false` if the response status is not 200:**
+  - Mocks a response with a status other than 200.
+  - Verifies that the function returns `false` when the response status is not 200.
 
-- Should find the shortest path between two Wikipedia pages.
-- Should return `null` if no path is found.
-- Should handle visited pages correctly.
-- Should handle errors gracefully.
+- **Should return `false` if the start page is invalid even if end page is valid:**
+  - Mocks an invalid start page but a valid end page.
+  - Verifies that the function returns `false` when the start page is invalid.
 
 ### findFirstPath
 
 Finds the first path between two Wikipedia pages.
 
-- Should find the first path between two Wikipedia pages.
-- Should return `null` if no path is found.
-- Should handle visited pages correctly.
-- Should handle errors gracefully.
+- **Should find the first path between two Wikipedia pages:**
+  - Mocks the response of Wikipedia pages to find the first path.
+  - Verifies that the function correctly finds the first path between two pages.
+
+- **Should return `null` if no path is found:**
+  - Mocks a scenario where there is no path between the pages.
+  - Verifies that the function returns `null` when no path is found.
+
+### findShortestPath
+
+Finds the shortest path between two Wikipedia pages.
+
+- **Should find the shortest path between two Wikipedia pages:**
+  - Mocks the response of Wikipedia pages to find the shortest path.
+  - Verifies that the function correctly finds the shortest path between two pages.
+
+- **Should return `null` if no path is found:**
+  - Mocks a scenario where there is no path between the pages.
+  - Verifies that the function returns `null` when no path is found.
+
+### getLinks
+
+Verifies that links are correctly extracted from a Wikipedia page.
+
+- **Should return a list of Wikipedia links:**
+  - Mocks the response of a Wikipedia page containing links.
+  - Verifies that the function correctly returns the found links.
+
+- **Should return an empty list if request fails:**
+  - Mocks a network failure.
+  - Verifies that the function returns an empty list when the request fails.
+
+### redirected
+
+Handles redirections on the ending Wikipedia page.
+
+- **Should return a set with the original and redirected URLs:**
+  - Mocks the response of a Wikipedia page with redirection.
+  - Verifies that the function correctly returns the original and redirected URLs.
+
+- **Should return a set with only the original URL if request fails:**
+  - Mocks a network failure.
+  - Verifies that the function handles errors and returns only the original URL.
 
 ## License
 
