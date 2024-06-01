@@ -49,7 +49,7 @@ async function main(): Promise<void> {
 
             // Print the found path or indicate that no path was found
             if (path) {
-                console.log('Path found:');
+                console.log('Success! Path found:');
                 path.forEach((page, index) => {
                     console.log(`${index + 1}. ${page}`);
                 });
