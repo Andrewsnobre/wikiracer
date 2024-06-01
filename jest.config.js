@@ -1,5 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
+  verbose: true,
   setupFilesAfterEnv: ['./src/__tests__/jest.setup.js'],
   testTimeout: 10000, // 10 seconds
   testEnvironment: 'node',
