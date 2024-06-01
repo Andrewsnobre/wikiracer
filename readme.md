@@ -23,7 +23,7 @@ npm install
 To run the script, use the following command, replacing `<startPage>` and `<endPage>` with the URLs of the Wikipedia pages you want to use as the start and end, respectively:
 
 ```sh
-npx ts-node src\wikiracer.ts --start <startPage> --end <endPage>
+npx ts-node src/index.ts --start <startPage> --end <endPage>
 ```
 
 or
@@ -35,7 +35,7 @@ npm start -- --start <startPage> --end <endPage>
 ### Example
 
 ```sh
-npx ts-node src\wikiracer.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
+npx ts-node src/index.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht"
 ```
 
 or
@@ -46,12 +46,11 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 
 ### Optional: Finding the Shortest Path
 
-To find the shortest path between the pages, add the `--shortest` or `-S` flag:
-
+To find the shortest path between the pages, add the `--shortest` or `-S` flag:<br>
 Warning: This option may take longer to run.
 
 ```sh
-npx ts-node src\wikiracer.ts --start <startPage> --end <endPage> --shortest
+npx ts-node src/index.ts --start <startPage> --end <endPage> --shortest
 ```
 
 or
@@ -63,7 +62,7 @@ npm start -- --start <startPage> --end <endPage> -S
 ### Example Finding the Shortest Path
 
 ```sh
-npx ts-node src\wikiracer.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht" --shortest
+npx ts-node src/index.ts --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht" --shortest
 ```
 
 or
