@@ -46,7 +46,8 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 
 ### Optional: Finding the Shortest Path
 
-To find the shortest path between the pages, add the `--shortest` or `-S` flag:<br>
+To find the shortest path between the pages, add the `--shortest` or `-S` flag:
+
 Warning: This option may take longer to run.
 
 ```sh
