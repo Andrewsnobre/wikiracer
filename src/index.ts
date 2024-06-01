@@ -2,8 +2,8 @@ import { findFirstPath } from './utils/findFirstPath';
 import { findShortestPath } from './utils/findShortestPath';
 import { checkPages } from './utils/checkPages';
 import { redirected } from './utils/redirected';
-import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import yargs from 'yargs';
 
 // Define a type for the command-line arguments
 interface Args {
@@ -41,7 +41,7 @@ async function main(): Promise<void> {
             // Handle potential redirection for the end page
             const endSet: Set<string> = await redirected(end);
             console.log(`Finding ${useShortestPath ? 'shortest' : 'first'} path from ${start} to ${end}`);
-            
+
             // Find the path based on the specified mode (shortest or first)
             const path: string[] | null = useShortestPath
                 ? await findShortestPath(start, endSet)
