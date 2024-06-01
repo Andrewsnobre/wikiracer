@@ -5,6 +5,22 @@ jest.mock('../utils/getLinks');
 const mockedGetLinks = getLinks as jest.MockedFunction<typeof getLinks>;
 
 describe('findShortestPath', () => {
+    let consoleLogSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+        mockedGetLinks.mockReset();
+        consoleLogSpy = jest.spyOn(console, 'log').mockImplementation((msg) => {
+            if (msg === "Processing...please wait") {
+                return;
+            }
+            console.log(msg);
+        });
+    });
+
+    afterEach(() => {
+        consoleLogSpy.mockRestore();
+    });
+
     it('should find the shortest path between two Wikipedia pages', async () => {
         mockedGetLinks.mockResolvedValueOnce(['https://en.wikipedia.org/wiki/JavaScript']);
         mockedGetLinks.mockResolvedValueOnce(['https://en.wikipedia.org/wiki/TypeScript']);
