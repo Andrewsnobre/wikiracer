@@ -252,4 +252,6 @@ Handles redirections on the ending Wikipedia page.
 
 ## License
 
-This project is licensed under the terms of the MIT license.
+Copyright © 2024 MIT licensed
+
+✨ Developed by Andrews Rodrigues
