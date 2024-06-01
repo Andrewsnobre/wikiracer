@@ -101,11 +101,10 @@ The script will return the path between the two pages, or an error message if no
 ### Example Output
 
 ```sh
-Path found: [
-'https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy',
-'https://en.wikipedia.org/wiki/Scorched_earth',
-'https://en.wikipedia.org/wiki/Wehrmacht'
-]
+Success! Path found:
+1. https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy
+2. https://en.wikipedia.org/wiki/Scorched_earth
+3. https://en.wikipedia.org/wiki/Wehrmacht
 Execution Time: 0m 7.123s
 ```
 
