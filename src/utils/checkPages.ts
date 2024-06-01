@@ -38,6 +38,11 @@ export async function checkPages(start: string, end: string): Promise<boolean> {
     }
 
     const endResponse = await axios.get(end, { timeout: 15000 });
+    if (!endResponse || !endResponse.data) {
+        console.error('Failed to fetch end page data.');
+        return false;
+    }
+
     const end$ = load(endResponse.data);
     if (end$('table.metadata.plainlinks.ambox.ambox-style.ambox-Orphan').length > 0) {
         console.error('End page is an orphan page with no Wikipedia pages linking to it.');
