@@ -1,6 +1,5 @@
 import { redirected } from '../utils/redirected';
 import axios from 'axios';
-import { load } from 'cheerio';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
