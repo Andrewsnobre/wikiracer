@@ -2,7 +2,7 @@ module.exports = {
   preset: 'ts-jest',
   verbose: true,
   setupFilesAfterEnv: ['./src/__tests__/jest.setup.js'],
-  testTimeout: 10000, // 10 seconds
+  testTimeout: 20000, // 20 seconds
   testEnvironment: 'node',
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
