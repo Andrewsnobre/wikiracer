@@ -22,12 +22,24 @@ const argv = yargs(hideBin(process.argv))
     .argv as Args;
 
 /**
+ * Logs the execution time.
+ * 
+ * @param startTime - The start time of the execution.
+ */
+function logExecutionTime(startTime: number): void {
+    const endTime: number = Date.now();
+    const totalTime: number = (endTime - startTime) / 1000; // Total time in seconds
+    console.log(`Execution Time: ${Math.floor(totalTime / 60)}m ${(totalTime % 60).toFixed(3)}s`);
+}
+
+/**
  * Main function to execute the script.
  * It validates the start and end Wikipedia pages, finds the first path or the shortest path between them,
  * and prints the path or an error message if no path is found.
- * 
+ *  
  * @returns {Promise<void>} - A promise that resolves when the main function completes.
  */
+ 
 async function main(): Promise<void> {
     const start: string = argv.start; // URL of the starting Wikipedia page
     const end: string = argv.end; // URL of the ending Wikipedia page
@@ -60,7 +72,7 @@ async function main(): Promise<void> {
             console.log('Invalid pages or pages in different languages.');
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error during execution:', error);
     }
 }
 
@@ -68,8 +80,6 @@ async function main(): Promise<void> {
 const startTime: number = Date.now();
 
 // Execute the main function and calculate the total execution time
-main().then((): void => {
-    const endTime: number = Date.now();
-    const totalTime: number = (endTime - startTime) / 1000; // Total time in seconds
-    console.log(`Execution Time: ${Math.floor(totalTime / 60)}m ${(totalTime % 60).toFixed(3)}s`);
+main().then(() => {
+    logExecutionTime(startTime);
 });
