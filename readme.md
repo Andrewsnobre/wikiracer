@@ -3,6 +3,29 @@
 
 This script finds the path between two Wikipedia pages using internal links. It provides a path of Wikipedia links with the start page as the first link, the end page as the final link, and each link occurring in the article body of the previous link.
 
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Example](#example)
+  - [Optional Flag: Finding the Shortest Path](#optional-flag-finding-the-shortest-path)
+  - [Example Finding the Shortest Path](#example-finding-the-shortest-path)
+- [Script Description](#script-description)
+  - [Main Functions](#main-functions)
+  - [Command-Line Variables](#command-line-variables)
+- [Output](#output)
+  - [Example Output](#example-output)
+- [Common Errors](#common-errors)
+- [Running Tests](#running-tests)
+- [Test Coverage](#test-coverage)
+  - [getLinks](#getlinks)
+  - [checkPages](#checkpages)
+  - [redirected](#redirected)
+  - [findShortestPath](#findshortestpath)
+  - [findFirstPath](#findfirstpath)
+- [License](#license)
+
 ## Prerequisites
 
 - Node.js (version 14 or higher recommended)
