@@ -1,9 +1,9 @@
 
-# Wikiracer
+# Wikiracer 🚀
 
 This script finds the path between two Wikipedia pages using internal links. It provides a path of Wikipedia links with the start page as the first link, the end page as the final link, and each link occurring in the article body of the previous link.
 
-## Table of Contents
+## Table of Contents 📑
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -26,12 +26,12 @@ This script finds the path between two Wikipedia pages using internal links. It 
   - [findFirstPath](#findfirstpath)
 - [License](#license)
 
-## Prerequisites
+## Prerequisites✅
 
 - Node.js (version 14 or higher recommended)
 - npm (version 6 or higher recommended)
 
-## Installation
+## Installation📥
 
 First, clone this repository and install the dependencies:
 
@@ -41,7 +41,7 @@ cd wikiracer
 npm install 
 ```
 
-## Usage
+## Usage💻
 
 To run the script, use the following command, replacing `<startPage>` and `<endPage>` with the URLs of the Wikipedia pages you want to use as the start and end, respectively:
 
@@ -71,7 +71,7 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 
 To find the shortest path between the pages, add the `--shortest` or `-S` flag:
 
-Warning: This option may take longer to run.
+⚠️ Warning: This option may take longer to run.
 
 ```sh
 npx ts-node src/index.ts --start <startPage> --end <endPage> --shortest
@@ -95,7 +95,7 @@ or
 npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht" -S
 ```
 
-## Script Description
+## Script Description📝
 
 - `import axios from 'axios';`: Imports the `axios` module to make HTTP requests.
 - `import cheerio, { load } from 'cheerio';`: Imports the `cheerio` module to manipulate the returned HTML.
@@ -117,7 +117,7 @@ npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end 
 - `--end`: URL of the ending Wikipedia page.
 - `--shortest` or `-S`: Optional flag to find the shortest path between the pages.
 
-## Output
+## Output📄
 
 The script will return the path between the two pages, or an error message if no valid path is found.
 
@@ -131,7 +131,7 @@ Success! Path found:
 Execution Time: 0m 7.123s
 ```
 
-## Common Errors
+## Common Errors❌
 
 - If the pages are not valid:
 
@@ -157,7 +157,7 @@ Execution Time: 0m 7.123s
   End page is an orphan page with no Wikipedia pages linking to it.
   ```
 
-## Running Tests
+## Running Tests🧪
 
 To run tests, use the following command:
 
@@ -165,7 +165,7 @@ To run tests, use the following command:
 npm test
 ```
 
-## Test Coverage
+## Test Coverage🧩
 
 The tests include checks for the following functionalities:
 
