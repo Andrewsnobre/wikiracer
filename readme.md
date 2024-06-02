@@ -30,7 +30,7 @@ This script finds the path between two Wikipedia pages using internal links. It 
 
 </details>
 
-## Wikiracer Architecture
+## Wikiracer Diagram
 
 <div style="text-align: center;">
   <img src="https://i.postimg.cc/rmSHLxSW/Untitled-diagram-2024-06-02-182717.png" alt="Wikiracer Architecture" style="width: 40%; height: 60%;">
