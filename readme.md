@@ -5,7 +5,7 @@ This script finds the path between two Wikipedia pages using internal links. It 
 
 <details>
 
-<summary><font size= 5px>Table of Contents 📚</font></summary>
+ <summary><span style="font-size: 1.5em;">Table of Contents 📚</span></summary>
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
