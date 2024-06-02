@@ -5,7 +5,7 @@ This script finds the path between two Wikipedia pages using internal links. It 
 
 <details>
 
- <summary>Table of Contents 📚</summary>
+<summary>Table of Contents 📚</summary>
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -20,7 +20,7 @@ This script finds the path between two Wikipedia pages using internal links. It 
   - [Example Output](#example-output)
 - [Common Errors](#common-errors)
 - [Running Tests](#running-tests)
-- Test Coverage
+- [Test Coverage](#test-coverage)
   - [getLinks](#getlinks)
   - [checkPages](#checkpages)
   - [redirected](#redirected)
@@ -170,9 +170,7 @@ To run tests, use the following command:
 npm test
 ```
 
-<details>
-
-<summary>Test Coverage 🧩</summary>
+## Test Coverage🧩
 
 The tests include checks for the following functionalities:
 
@@ -256,8 +254,6 @@ Handles redirections on the ending Wikipedia page.
 - **Should return a set with only the original URL if request fails:**
   - Mocks a network failure.
   - Verifies that the function handles errors and returns only the original URL.
-
-</details>
 
 ## License
 
