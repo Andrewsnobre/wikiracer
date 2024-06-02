@@ -264,8 +264,9 @@ Handles redirections on the ending Wikipedia page.
   - Verifies that the function handles errors and returns only the original URL.
 
 ## License
+
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Copyright © 2024 
+Copyright © 2024
 
 ✨ Developed by Andrews Rodrigues
