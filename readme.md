@@ -28,8 +28,9 @@ This script finds the path between two Wikipedia pages using internal links. It 
 
 ## Prerequisites✅
 
-- Node.js (version 14 or higher recommended)
-- npm (version 6 or higher recommended)
+✔️ Node.js (version 14 or higher recommended)
+
+✔️ npm (version 6 or higher recommended)
 
 ## Installation📥
 
@@ -131,7 +132,7 @@ Success! Path found:
 Execution Time: 0m 7.123s
 ```
 
-## Common Errors❌
+## Common Errors🚨
 
 - If the pages are not valid:
 
