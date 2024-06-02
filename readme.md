@@ -3,7 +3,7 @@
 
 This script finds the path between two Wikipedia pages using internal links. It provides a path of Wikipedia links with the start page as the first link, the end page as the final link, and each link occurring in the article body of the previous link.
 
-## Table of Contents 📑
+## Table of Contents 📚
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
