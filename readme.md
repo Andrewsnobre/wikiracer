@@ -5,7 +5,7 @@ This script finds the path between two Wikipedia pages using internal links. It 
 
 <details>
 
- <summary><span style="font-size: 1.5em;">Table of Contents 📚</span></summary>
+ <summary>Table of Contents 📚</summary>
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -170,7 +170,9 @@ To run tests, use the following command:
 npm test
 ```
 
-<details><summary><font size= 5px>Test Coverage 🧩</font></summary>
+<details>
+
+<summary>Test Coverage 🧩</summary>
 
 The tests include checks for the following functionalities:
 
