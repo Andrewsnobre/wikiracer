@@ -4,7 +4,6 @@
 This script finds the path between two Wikipedia pages using internal links. It provides a path of Wikipedia links with the start page as the first link, the end page as the final link, and each link occurring in the article body of the previous link.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 <details>
 
@@ -265,7 +264,8 @@ Handles redirections on the ending Wikipedia page.
   - Verifies that the function handles errors and returns only the original URL.
 
 ## License
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Copyright © 2024 MIT licensed
+Copyright © 2024 
 
 ✨ Developed by Andrews Rodrigues
