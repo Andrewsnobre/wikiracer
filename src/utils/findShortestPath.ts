@@ -27,8 +27,9 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
     const path: PathMap = { [start]: [start] };  // Initialize the path map with the start URL.
     const queue: string[] = [start];  // Initialize the queue with the start URL.
     const visited: Set<string> = new Set([start]);  // Track visited pages
-
+    console.log("⚠️  Warning: Finding the shortest path may take longer to run.");
     console.log("Processing...please wait");
+
     while (queue.length > 0) {
         const currentQueue = [...queue];
         queue.length = 0;  // Clear the queue.
