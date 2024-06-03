@@ -107,6 +107,8 @@ or
 ```sh
 npm start -- --start "https://en.wikipedia.org/wiki/Battle_of_Cr%C3%A9cy" --end "https://en.wikipedia.org/wiki/Wehrmacht" -S
 ```
+### Performance Considerations
+Without the `-S` flag, the program will find the first available path between the pages, which can be faster but does not guarantee the shortest path. With the `-S` flag, the program uses a more intensive approach, ensuring that the shortest path is found but with a potential additional execution time cost.
 
 ## Script Description📝
 
