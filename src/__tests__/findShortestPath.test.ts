@@ -13,7 +13,7 @@ describe('findShortestPath', () => {
             if (msg === "Processing...please wait" || msg.includes("⚠️  Warning")) {
                 return;
             }
-            return console.log(msg); // Adicione este retorno para evitar loop
+            return console.log(msg); 
         });
     });
 
