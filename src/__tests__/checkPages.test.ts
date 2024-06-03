@@ -1,6 +1,6 @@
 import { checkPages } from '../utils/checkPages';
-import axios from 'axios';
 import { getLinks } from '../utils/getLinks';
+import axios from 'axios';
 
 // Mock axios and getLinks functions
 jest.mock('axios');
