@@ -19,9 +19,9 @@ interface RedirectSet extends Set<string> { }
 /**
  * Finds the first path between two Wikipedia pages using BFS (Breadth-First Search).
  * 
- * @param {string} start - The URL of the starting Wikipedia page.
+ * @param {string} start - The URL of the starting Wikipedia page
  * @param {RedirectSet} endSet - A set of possible ending Wikipedia page URLs.
- * @returns {Promise<string[] | null>} - The first path found as an array of URLs, ou null if no path is found.
+ * @returns {Promise<string[] | null>} - The first path found as an array of URLs, or null if no path is found.
  */
 export async function findFirstPath(start: string, endSet: RedirectSet): Promise<string[] | null> {
     const path: PathMap = { [start]: [start] };  // Initialize the path map with the start URL.
