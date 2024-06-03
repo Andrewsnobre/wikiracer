@@ -10,10 +10,10 @@ describe('findShortestPath', () => {
     beforeEach(() => {
         mockedGetLinks.mockReset();
         consoleLogSpy = jest.spyOn(console, 'log').mockImplementation((msg) => {
-            if (msg === "Processing...please wait") {
+            if (msg === "Processing...please wait" || msg.includes("⚠️  Warning")) {
                 return;
             }
-            console.log(msg);
+            return console.log(msg); // Adicione este retorno para evitar loop
         });
     });
 
