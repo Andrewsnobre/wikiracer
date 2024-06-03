@@ -21,11 +21,12 @@ interface RedirectSet extends Set<string> { }
  * 
  * @param {string} start - The URL of the starting Wikipedia page.
  * @param {RedirectSet} endSet - A set of possible ending Wikipedia page URLs.
- * @returns {Promise<string[] | null>} - The shortest path found as an array of URLs, ou null if no path is found.
+ * @returns {Promise<string[] | null>} - The shortest path found as an array of URLs, or null if no path is found.
  */
 export async function findShortestPath(start: string, endSet: RedirectSet): Promise<string[] | null> {
     const path: PathMap = { [start]: [start] };  // Initialize the path map with the start URL.
     const queue: string[] = [start];  // Initialize the queue with the start URL.
+    const visited: Set<string> = new Set([start]);  // Track visited pages
 
     console.log("Processing...please wait");
     while (queue.length > 0) {
@@ -43,7 +44,8 @@ export async function findShortestPath(start: string, endSet: RedirectSet): Prom
                     return path[page].concat(link);  // Return the path if the end page is found.
                 }
 
-                if (!path[link] && link !== page) {  // If the link hasn't been visited.
+                if (!visited.has(link) && link !== page) {  // If the link hasn't been visited.
+                    visited.add(link);  // Mark the link as visited.
                     path[link] = path[page].concat(link);  // Store the path to this link.
                     queue.push(link);  // Enqueue the link for further exploration.
                 }
